@@ -367,7 +367,14 @@
             <div class="viewer-instructions">Pinch to zoom • Drag to rotate</div>
             <model-viewer id="model-viewer" src="" alt="AR Image" ar ar-modes="webxr scene-viewer quick-look"
                 ar-scale="auto" camera-controls touch-action="pan-y" shadow-intensity="0.5" exposure="1.2" auto-rotate
-                camera-orbit="0deg 75deg 2m">
+                camera-orbit="0deg 90deg 1.5m" min-camera-orbit="auto auto 0.5m" max-camera-orbit="auto auto 4m"
+                link="https://www.daleelcoo.com/business/b0cb78f1-7ff9-4b52-9820-c4415c8089a1">
+                <!-- iOS Quick Look Banner -->
+                <a id="ar-link" slot="ar-button"
+                    href="https://www.daleelcoo.com/business/b0cb78f1-7ff9-4b52-9820-c4415c8089a1"
+                    style="display: none;">
+                    View Business
+                </a>
             </model-viewer>
             <button class="custom-ar-button" id="ar-button">
                 <span class="ar-icon">📱</span>
@@ -431,7 +438,7 @@
                     <img src="${img.path}" alt="${img.name}" loading="lazy">
                     <div class="card-content">
                         <div class="image-name">${img.name}</div>
-                        <button class="ar-btn" data-model="${img.model}" data-name="${img.name}">
+                        <button class="ar-btn" data-model="${img.model}" data-name="${img.name}" data-link="${img.link || ''}">
                             <span>👁️</span>
                             <span>View in AR</span>
                         </button>
@@ -442,7 +449,8 @@
                 card.querySelector('.ar-btn').addEventListener('click', (e) => {
                     const model = e.currentTarget.dataset.model;
                     const name = e.currentTarget.dataset.name;
-                    openARViewer(model, name);
+                    const link = e.currentTarget.dataset.link;
+                    openARViewer(model, name, link);
                 });
 
                 gallery.appendChild(card);
@@ -450,11 +458,23 @@
         }
 
         // Open AR Viewer
-        function openARViewer(modelPath, imageName) {
+        function openARViewer(modelPath, imageName, linkUrl) {
             console.log('Opening AR viewer for:', modelPath);
+            console.log('AR link:', linkUrl);
 
             viewerTitle.textContent = imageName;
             modelViewer.src = modelPath;
+
+            // Set the link for Scene Viewer (Android)
+            if (linkUrl) {
+                modelViewer.setAttribute('link', linkUrl);
+                // Update the iOS Quick Look link
+                const arLink = document.getElementById('ar-link');
+                if (arLink) {
+                    arLink.href = linkUrl;
+                }
+            }
+
             arViewer.classList.add('active');
 
             // Wait for model to load

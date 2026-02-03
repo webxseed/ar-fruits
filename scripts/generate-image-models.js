@@ -94,7 +94,12 @@ function createImagePlaneGLB(imagePath, outputPath) {
         asset: { version: "2.0", generator: "AR Image Viewer" },
         scene: 0,
         scenes: [{ nodes: [0] }],
-        nodes: [{ mesh: 0, name: "ImagePlane" }],
+        nodes: [{
+            mesh: 0,
+            name: "ImagePlane",
+            // Rotate the plane to stand upright (rotate -90 degrees around X axis)
+            rotation: [0, 0, 0, 1] // No rotation needed - plane is already in XY plane
+        }],
         meshes: [{
             name: "Plane",
             primitives: [{
