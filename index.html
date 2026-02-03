@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <title>AR Image Viewer | View Images in Your Space</title>
+    <title>AR 3D Viewer | View Models in Your Space</title>
     <meta name="description"
         content="View images in augmented reality! Place photos in your real environment using your phone's camera.">
 
@@ -92,6 +92,30 @@
 
         .image-card:active {
             transform: scale(0.98);
+        }
+
+        .image-card .model-preview {
+            width: 100%;
+            height: 140px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .image-card .model-preview model-viewer {
+            position: absolute;
+            inset: 0;
+        }
+
+        .image-card .model-preview .model-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            z-index: 1;
         }
 
         .image-card img {
@@ -327,24 +351,24 @@
 <body>
     <!-- Loading Screen -->
     <div class="loading" id="loading">
-        <div class="loading-spinner">🖼️</div>
-        <p class="loading-text">Loading AR Experience...</p>
+        <div class="loading-spinner">📦</div>
+        <p class="loading-text">Loading 3D Models...</p>
     </div>
 
     <!-- Main Gallery -->
     <div class="container" id="main-container">
         <header class="header">
-            <h1>🖼️ AR Image Viewer</h1>
-            <p>Place images in your real space</p>
-            <div class="image-count" id="image-count">0 images</div>
+            <h1>📦 AR 3D Viewer</h1>
+            <p>Place 3D models in your real space</p>
+            <div class="image-count" id="image-count">0 models</div>
         </header>
 
         <div class="gallery" id="gallery"></div>
 
         <div class="empty-state" id="empty-state">
-            <div class="icon">📁</div>
-            <h3>No Images Found</h3>
-            <p>Add images to <code>assets/img/</code><br>then run <code>npm run scan</code></p>
+            <div class="icon">📦</div>
+            <h3>No Models Found</h3>
+            <p>Add .glb models to <code>assets/models/</code><br>then run <code>npm run scan</code></p>
         </div>
 
         <div class="instructions">
@@ -408,10 +432,10 @@
 
             if (images.length === 0) {
                 emptyState.style.display = 'block';
-                imageCount.textContent = '0 images';
+                imageCount.textContent = '0 models';
             } else {
                 renderGallery();
-                imageCount.textContent = `${images.length} image${images.length > 1 ? 's' : ''}`;
+                imageCount.textContent = `${images.length} model${images.length > 1 ? 's' : ''}`;
             }
 
             // Hide loading
@@ -427,19 +451,33 @@
             });
         }
 
-        // Render image gallery
+        // Render model gallery
         function renderGallery() {
             gallery.innerHTML = '';
 
-            images.forEach((img) => {
+            images.forEach((item) => {
                 const card = document.createElement('div');
                 card.className = 'image-card';
+
+                // Create a colored preview with model-viewer thumbnail
                 card.innerHTML = `
-                    <img src="${img.path}" alt="${img.name}" loading="lazy">
+                    <div class="model-preview" style="background: linear-gradient(135deg, ${item.color}33 0%, ${item.color}66 100%);">
+                        <model-viewer 
+                            src="${item.model}" 
+                            alt="${item.name}"
+                            camera-controls
+                            auto-rotate
+                            rotation-per-second="30deg"
+                            disable-zoom
+                            interaction-prompt="none"
+                            style="width: 100%; height: 100%; pointer-events: none;">
+                        </model-viewer>
+                        <div class="model-icon" style="color: ${item.color};">📦</div>
+                    </div>
                     <div class="card-content">
-                        <div class="image-name">${img.name}</div>
-                        <button class="ar-btn" data-model="${img.model}" data-name="${img.name}" data-link="${img.link || ''}">
-                            <span>👁️</span>
+                        <div class="image-name">${item.name}</div>
+                        <button class="ar-btn" data-model="${item.model}" data-name="${item.name}" data-link="${item.link || ''}">
+                            <span>📱</span>
                             <span>View in AR</span>
                         </button>
                     </div>
