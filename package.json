@@ -1,11 +1,11 @@
 {
-  "name": "ar-fruits-experience",
+  "name": "ar-image-viewer",
   "version": "1.0.0",
-  "description": "WebAR experience that places random 3D fruits in your environment",
+  "description": "WebAR experience that lets you view images in augmented reality",
   "main": "index.html",
   "scripts": {
+    "scan": "node scripts/scan-images.js",
     "generate-qr": "node js/generate-qr.js",
-    "generate-models": "node scripts/create-models.js",
     "serve": "npx serve .",
     "dev": "npx serve . -p 3000"
   },
@@ -13,9 +13,8 @@
     "webxr",
     "ar",
     "augmented-reality",
-    "3d",
-    "fruits",
-    "model-viewer"
+    "images",
+    "gallery"
   ],
   "author": "",
   "license": "MIT",
