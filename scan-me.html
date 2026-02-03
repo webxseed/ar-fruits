@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Me - AR Fruits Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .fruit-icons {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .qr-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 24px;
+            display: inline-block;
+            margin-bottom: 2rem;
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .qr-code {
+            width: 250px;
+            height: 250px;
+            display: block;
+        }
+
+        .scan-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .instructions {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        .url {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            word-break: break-all;
+        }
+
+        .url a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .feature {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-text {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            h1 {
+                background: none;
+                -webkit-text-fill-color: #333;
+                color: #333;
+            }
+
+            .subtitle,
+            .instructions,
+            .feature-text {
+                color: #666;
+            }
+
+            .url {
+                background: #f5f5f5;
+                color: #666;
+            }
+
+            .url a {
+                color: #333;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="fruit-icons">🍎 🍌 🍊 🍓 🍇</div>
+
+        <h1>AR Fruits</h1>
+        <p class="subtitle">Experience 3D Fruits in Your Space</p>
+
+        <div class="qr-container">
+            <img src="assets/qr-code.png" alt="Scan this QR code" class="qr-code">
+        </div>
+
+        <p class="scan-text">📱 Scan with Your Phone</p>
+        <p class="instructions">
+            Point your camera at the QR code.<br>
+            Tap the notification to open the AR experience.
+        </p>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-text">Tap to Place</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔄</div>
+                <div class="feature-text">Rotate & Scale</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎲</div>
+                <div class="feature-text">Random Fruit</div>
+            </div>
+        </div>
+
+        <div class="url">
+            Or visit: <a href="https://ar-fruits-demo.netlify.app"
+                target="_blank">https://ar-fruits-demo.netlify.app</a>
+        </div>
+    </div>
+</body>
+
+</html>

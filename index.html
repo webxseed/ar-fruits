@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- SEO Meta Tags -->
+    <title>AR Fruit Experience | Place 3D Fruits in Your Space</title>
+    <meta name="description" content="Experience augmented reality! Scan the QR code and place realistic 3D fruits in your environment using your phone's camera.">
+    <meta name="keywords" content="AR, augmented reality, WebXR, 3D fruits, interactive, mobile AR">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="AR Fruit Experience">
+    <meta property="og:description" content="Place 3D fruits in your real environment using AR">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Model Viewer -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="fruit-spinner">
+                <span class="spinning-fruit">🍎</span>
+            </div>
+            <p class="loading-text">Loading AR Experience...</p>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="app" class="app-container hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon" id="fruit-icon">🍎</span>
+                    <span class="logo-text">AR Fruits</span>
+                </div>
+                <div class="fruit-badge" id="fruit-badge">
+                    <span class="badge-text" id="fruit-name">Apple</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- AR Viewer Section -->
+        <main class="main-content">
+            <div class="viewer-container">
+                <model-viewer
+                    id="fruit-viewer"
+                    src=""
+                    alt="3D Fruit Model"
+                    ar
+                    ar-modes="webxr scene-viewer quick-look"
+                    ar-scale="auto"
+                    camera-controls
+                    touch-action="pan-y"
+                    interaction-prompt="auto"
+                    shadow-intensity="1"
+                    shadow-softness="0.8"
+                    exposure="1"
+                    environment-image="neutral"
+                    auto-rotate
+                    auto-rotate-delay="3000"
+                    rotation-per-second="30deg"
+                    camera-orbit="0deg 75deg 105%"
+                    min-camera-orbit="auto auto 50%"
+                    max-camera-orbit="auto auto 200%"
+                    interpolation-decay="200"
+                    loading="eager"
+                >
+                    <!-- AR Button Slot -->
+                    <button slot="ar-button" id="ar-button" class="ar-button">
+                        <svg class="ar-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>View in AR</span>
+                    </button>
+
+                    <!-- Loading Indicator -->
+                    <div slot="progress-bar" class="model-progress">
+                        <div class="model-progress-bar"></div>
+                    </div>
+
+                    <!-- Poster -->
+                    <div slot="poster" class="poster">
+                        <div class="poster-content">
+                            <div class="poster-spinner"></div>
+                            <p>Loading 3D Model...</p>
+                        </div>
+                    </div>
+                </model-viewer>
+
+                <!-- Fallback Message (shown when AR not supported) -->
+                <div id="ar-fallback" class="ar-fallback hidden">
+                    <div class="fallback-icon">📱</div>
+                    <h3>AR Not Available</h3>
+                    <p>Your device doesn't support AR. Enjoy the 3D viewer instead!</p>
+                    <p class="fallback-hint">Use touch gestures to rotate and zoom</p>
+                </div>
+            </div>
+
+            <!-- Instructions Card -->
+            <div class="instructions-card">
+                <h2 class="instructions-title">How to Use AR</h2>
+                <div class="instructions-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Tap "View in AR"</h4>
+                            <p>Press the button to launch AR mode</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Scan Your Space</h4>
+                            <p>Move your phone to detect a flat surface</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Tap to Place</h4>
+                            <p>Tap on the surface to place the fruit</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Interact</h4>
+                            <p>Pinch to scale, drag to rotate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fruit Info Card -->
+            <div class="fruit-info-card">
+                <div class="fruit-info-header">
+                    <span class="fruit-emoji" id="fruit-emoji">🍎</span>
+                    <div class="fruit-details">
+                        <h3 id="fruit-display-name">Apple</h3>
+                        <p id="fruit-description">A crisp and delicious fruit</p>
+                    </div>
+                </div>
+                <button id="new-fruit-btn" class="new-fruit-button">
+                    <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23 4V10H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 20V14H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3.51 9.00001C4.01717 7.56679 4.87913 6.2854 6.01547 5.27543C7.1518 4.26545 8.52547 3.55977 10.0083 3.22427C11.4911 2.88878 13.0348 2.93436 14.4952 3.35679C15.9556 3.77922 17.2853 4.56473 18.36 5.64001L23 10M1 14L5.64 18.36C6.71475 19.4353 8.04437 20.2208 9.50481 20.6432C10.9652 21.0657 12.5089 21.1112 13.9917 20.7758C15.4745 20.4403 16.8482 19.7346 17.9845 18.7246C19.1209 17.7146 19.9828 16.4332 20.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Try Another Fruit</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by WebXR • Made with ❤️</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/fruits.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

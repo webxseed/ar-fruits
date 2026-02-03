@@ -1,0 +1,25 @@
+{
+  "name": "ar-fruits-experience",
+  "version": "1.0.0",
+  "description": "WebAR experience that places random 3D fruits in your environment",
+  "main": "index.html",
+  "scripts": {
+    "generate-qr": "node js/generate-qr.js",
+    "generate-models": "node scripts/create-models.js",
+    "serve": "npx serve .",
+    "dev": "npx serve . -p 3000"
+  },
+  "keywords": [
+    "webxr",
+    "ar",
+    "augmented-reality",
+    "3d",
+    "fruits",
+    "model-viewer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "qrcode": "^1.5.3"
+  }
+}
