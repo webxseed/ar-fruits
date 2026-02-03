@@ -19,6 +19,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Model Viewer for AR -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -42,7 +45,7 @@
         /* Header */
         .header {
             text-align: center;
-            padding: 30px 0;
+            padding: 25px 0;
         }
 
         .header h1 {
@@ -50,13 +53,25 @@
             font-weight: 800;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .header p {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .image-count {
+            display: inline-block;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: #1a1a2e;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 12px;
         }
 
         /* Image Gallery */
@@ -75,16 +90,14 @@
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .image-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        .image-card:active {
+            transform: scale(0.98);
         }
 
         .image-card img {
             width: 100%;
-            height: 150px;
+            height: 140px;
             object-fit: cover;
-            cursor: pointer;
         }
 
         .image-card .card-content {
@@ -92,12 +105,13 @@
         }
 
         .image-card .image-name {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             margin-bottom: 10px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .ar-btn {
@@ -118,50 +132,35 @@
             transition: all 0.3s;
         }
 
-        .ar-btn:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
-        }
-
         .ar-btn:active {
+            opacity: 0.8;
             transform: scale(0.98);
         }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .empty-state .icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-
-        /* AR Viewer Modal */
-        .ar-modal {
+        /* AR Viewer Section */
+        .ar-viewer-section {
+            display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 9999;
-            display: none;
+            background: #0a0a1a;
+            z-index: 1000;
             flex-direction: column;
         }
 
-        .ar-modal.active {
+        .ar-viewer-section.active {
             display: flex;
         }
 
-        .ar-modal-header {
+        .ar-viewer-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
             background: rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .ar-modal-title {
+        .ar-viewer-title {
             font-size: 1rem;
             font-weight: 600;
         }
@@ -175,58 +174,53 @@
             color: white;
             font-size: 20px;
             cursor: pointer;
-            transition: background 0.3s;
         }
 
-        .ar-close-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .ar-content {
+        .model-container {
             flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow: hidden;
+            position: relative;
+            background: radial-gradient(ellipse at center, #1a1a3e 0%, #0a0a1a 100%);
         }
 
-        .ar-content img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            object-fit: contain;
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
         }
 
-        .ar-controls {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            text-align: center;
+        model-viewer::part(default-ar-button) {
+            display: none;
         }
 
-        .ar-controls p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-
-        .ar-launch-btn {
-            padding: 15px 40px;
+        /* Custom AR Button */
+        .custom-ar-button {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 16px 40px;
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: #1a1a2e;
             border: none;
             border-radius: 30px;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 40px rgba(56, 239, 125, 0.4);
             transition: all 0.3s;
+            z-index: 10;
         }
 
-        .ar-launch-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(56, 239, 125, 0.3);
+        .custom-ar-button:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        .custom-ar-button .ar-icon {
+            font-size: 1.3rem;
         }
 
         /* Loading */
@@ -235,6 +229,7 @@
             inset: 0;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9998;
@@ -246,51 +241,40 @@
             pointer-events: none;
         }
 
-        .loading-content {
-            text-align: center;
-        }
-
         .loading-spinner {
-            font-size: 3rem;
-            animation: spin 2s ease-in-out infinite;
+            font-size: 3.5rem;
+            animation: bounce 1s ease-in-out infinite;
         }
 
-        @keyframes spin {
+        @keyframes bounce {
 
             0%,
             100% {
-                transform: rotate(-10deg);
+                transform: translateY(0);
             }
 
             50% {
-                transform: rotate(10deg);
+                transform: translateY(-15px);
             }
         }
 
         .loading-text {
             font-size: 1.1rem;
             color: rgba(255, 255, 255, 0.7);
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
-        /* Footer */
-        .footer {
+        /* Empty State */
+        .empty-state {
             text-align: center;
-            padding: 30px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.85rem;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+            display: none;
         }
 
-        /* Image count badge */
-        .image-count {
-            display: inline-block;
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: #1a1a2e;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-top: 15px;
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
         }
 
         /* Instructions */
@@ -299,8 +283,14 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 15px;
-            margin-top: 20px;
+            margin-top: 25px;
             text-align: center;
+        }
+
+        .instructions h3 {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .instructions p {
@@ -309,15 +299,27 @@
             line-height: 1.6;
         }
 
-        /* AR unavailable message */
-        .ar-unavailable {
-            background: rgba(245, 87, 108, 0.1);
-            border: 1px solid rgba(245, 87, 108, 0.3);
-            color: #f5576c;
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 15px;
-            font-size: 0.9rem;
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+        }
+
+        /* Viewer Instructions */
+        .viewer-instructions {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            z-index: 5;
         }
     </style>
 </head>
@@ -325,52 +327,52 @@
 <body>
     <!-- Loading Screen -->
     <div class="loading" id="loading">
-        <div class="loading-content">
-            <div class="loading-spinner">🖼️</div>
-            <p class="loading-text">Loading images...</p>
-        </div>
+        <div class="loading-spinner">🖼️</div>
+        <p class="loading-text">Loading AR Experience...</p>
     </div>
 
-    <div class="container">
+    <!-- Main Gallery -->
+    <div class="container" id="main-container">
         <header class="header">
             <h1>🖼️ AR Image Viewer</h1>
-            <p>Tap an image to view it in your space</p>
+            <p>Place images in your real space</p>
             <div class="image-count" id="image-count">0 images</div>
         </header>
 
-        <div class="gallery" id="gallery">
-            <!-- Images will be loaded here dynamically -->
-        </div>
+        <div class="gallery" id="gallery"></div>
 
-        <div class="empty-state" id="empty-state" style="display: none;">
+        <div class="empty-state" id="empty-state">
             <div class="icon">📁</div>
             <h3>No Images Found</h3>
-            <p>Add images to <code>assets/img/</code> folder<br>then run <code>node scripts/scan-images.js</code></p>
+            <p>Add images to <code>assets/img/</code><br>then run <code>npm run scan</code></p>
         </div>
 
         <div class="instructions">
-            <p>📱 On iPhone: Uses AR Quick Look<br>
-                🤖 On Android: Uses Scene Viewer<br>
-                💻 On Desktop: Fullscreen preview</p>
+            <h3>📱 How It Works</h3>
+            <p>Tap an image → View in 3D → Press "Place in AR" to see it floating in your space!</p>
         </div>
 
         <footer class="footer">
-            <p>Powered by WebXR • Made with ❤️</p>
+            <p>Powered by WebXR & Model Viewer</p>
         </footer>
     </div>
 
-    <!-- AR Viewer Modal -->
-    <div class="ar-modal" id="ar-modal">
-        <div class="ar-modal-header">
-            <span class="ar-modal-title" id="ar-modal-title">Image</span>
-            <button class="ar-close-btn" id="ar-close">✕</button>
+    <!-- AR Viewer Section -->
+    <div class="ar-viewer-section" id="ar-viewer">
+        <div class="ar-viewer-header">
+            <span class="ar-viewer-title" id="viewer-title">Image</span>
+            <button class="ar-close-btn" id="close-viewer">✕</button>
         </div>
-        <div class="ar-content">
-            <img id="ar-preview-image" src="" alt="Preview">
-        </div>
-        <div class="ar-controls">
-            <p>Viewing: <span id="ar-filename"></span></p>
-            <a id="ar-download-link" href="" download style="display: none;"></a>
+        <div class="model-container">
+            <div class="viewer-instructions">Pinch to zoom • Drag to rotate</div>
+            <model-viewer id="model-viewer" src="" alt="AR Image" ar ar-modes="webxr scene-viewer quick-look"
+                ar-scale="auto" camera-controls touch-action="pan-y" shadow-intensity="0.5" exposure="1.2" auto-rotate
+                camera-orbit="0deg 75deg 2m">
+            </model-viewer>
+            <button class="custom-ar-button" id="ar-button">
+                <span class="ar-icon">📱</span>
+                <span>Place in AR</span>
+            </button>
         </div>
     </div>
 
@@ -383,17 +385,20 @@
         const emptyState = document.getElementById('empty-state');
         const imageCount = document.getElementById('image-count');
         const loading = document.getElementById('loading');
-        const arModal = document.getElementById('ar-modal');
-        const arPreviewImage = document.getElementById('ar-preview-image');
-        const arModalTitle = document.getElementById('ar-modal-title');
-        const arFilename = document.getElementById('ar-filename');
-        const arClose = document.getElementById('ar-close');
+        const arViewer = document.getElementById('ar-viewer');
+        const modelViewer = document.getElementById('model-viewer');
+        const viewerTitle = document.getElementById('viewer-title');
+        const closeViewer = document.getElementById('close-viewer');
+        const arButton = document.getElementById('ar-button');
 
-        // Check if IMAGES is defined (from images.js)
+        // Images list from images.js
         const images = typeof IMAGES !== 'undefined' ? IMAGES : [];
 
         // Initialize
         function init() {
+            console.log('Initializing AR Image Viewer...');
+            console.log('Found images:', images);
+
             if (images.length === 0) {
                 emptyState.style.display = 'block';
                 imageCount.textContent = '0 images';
@@ -403,69 +408,90 @@
             }
 
             // Hide loading
-            setTimeout(() => {
-                loading.classList.add('hidden');
-            }, 800);
+            setTimeout(() => loading.classList.add('hidden'), 800);
 
-            // AR close button
-            arClose.addEventListener('click', closeModal);
+            // Event listeners
+            closeViewer.addEventListener('click', closeARViewer);
+            arButton.addEventListener('click', activateAR);
 
             // Close on escape
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeModal();
-            });
-
-            // Close on backdrop click
-            arModal.addEventListener('click', (e) => {
-                if (e.target === arModal) closeModal();
+                if (e.key === 'Escape') closeARViewer();
             });
         }
 
-        // Render gallery
+        // Render image gallery
         function renderGallery() {
             gallery.innerHTML = '';
 
-            images.forEach((img, index) => {
+            images.forEach((img) => {
                 const card = document.createElement('div');
                 card.className = 'image-card';
                 card.innerHTML = `
-                    <img src="${img.path}" alt="${img.name}" loading="lazy" onclick="viewImage('${img.path}', '${img.name}')">
+                    <img src="${img.path}" alt="${img.name}" loading="lazy">
                     <div class="card-content">
                         <div class="image-name">${img.name}</div>
-                        <button class="ar-btn" onclick="viewImage('${img.path}', '${img.name}')">
+                        <button class="ar-btn" data-model="${img.model}" data-name="${img.name}">
                             <span>👁️</span>
                             <span>View in AR</span>
                         </button>
                     </div>
                 `;
+
+                // Add click handler
+                card.querySelector('.ar-btn').addEventListener('click', (e) => {
+                    const model = e.currentTarget.dataset.model;
+                    const name = e.currentTarget.dataset.name;
+                    openARViewer(model, name);
+                });
+
                 gallery.appendChild(card);
             });
         }
 
-        // View image
-        function viewImage(imagePath, imageName) {
-            console.log('Viewing:', imagePath);
+        // Open AR Viewer
+        function openARViewer(modelPath, imageName) {
+            console.log('Opening AR viewer for:', modelPath);
 
-            // Set image in modal
-            arPreviewImage.src = imagePath;
-            arModalTitle.textContent = imageName;
-            arFilename.textContent = imageName;
+            viewerTitle.textContent = imageName;
+            modelViewer.src = modelPath;
+            arViewer.classList.add('active');
 
-            // Show modal
-            arModal.classList.add('active');
-
-            // For iOS, try AR Quick Look
-            // For Android, try Intent-based AR
-            // For now, just show the fullscreen preview
+            // Wait for model to load
+            modelViewer.addEventListener('load', () => {
+                console.log('Model loaded, AR ready');
+            }, { once: true });
         }
 
-        // Close modal
-        function closeModal() {
-            arModal.classList.remove('active');
+        // Close AR Viewer
+        function closeARViewer() {
+            arViewer.classList.remove('active');
+            modelViewer.src = '';
         }
 
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', init);
+        // Activate AR
+        function activateAR() {
+            console.log('Activating AR...');
+
+            if (modelViewer.canActivateAR) {
+                modelViewer.activateAR();
+            } else {
+                // Try anyway - Scene Viewer/Quick Look might work
+                try {
+                    modelViewer.activateAR();
+                } catch (e) {
+                    console.log('AR activation failed:', e);
+                    alert('AR is not available on this device. Try on a mobile phone with AR support.');
+                }
+            }
+        }
+
+        // Initialize on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 

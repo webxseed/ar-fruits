@@ -4,7 +4,7 @@
   "description": "WebAR experience that lets you view images in augmented reality",
   "main": "index.html",
   "scripts": {
-    "scan": "node scripts/scan-images.js",
+    "scan": "node scripts/generate-image-models.js",
     "generate-qr": "node js/generate-qr.js",
     "serve": "npx serve .",
     "dev": "npx serve . -p 3000"
