@@ -9,24 +9,24 @@
     --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     --fruit-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
     --dark-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    
+
     --bg-primary: #0f0f1a;
     --bg-secondary: #1a1a2e;
     --bg-card: rgba(26, 26, 46, 0.8);
     --bg-glass: rgba(255, 255, 255, 0.05);
-    
+
     --text-primary: #ffffff;
     --text-secondary: rgba(255, 255, 255, 0.7);
     --text-muted: rgba(255, 255, 255, 0.5);
-    
+
     --accent-primary: #667eea;
     --accent-secondary: #764ba2;
     --accent-success: #38ef7d;
     --accent-warning: #f5576c;
-    
+
     --border-color: rgba(255, 255, 255, 0.1);
     --shadow-color: rgba(0, 0, 0, 0.3);
-    
+
     /* Spacing */
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
@@ -34,25 +34,27 @@
     --spacing-lg: 1.5rem;
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
-    
+
     /* Border Radius */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     --radius-xl: 28px;
     --radius-full: 50%;
-    
+
     /* Transitions */
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
-    
+
     /* Font */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Reset & Base */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -117,13 +119,27 @@ body {
 }
 
 @keyframes spin {
-    0%, 100% { transform: rotate(-15deg); }
-    50% { transform: rotate(15deg); }
+
+    0%,
+    100% {
+        transform: rotate(-15deg);
+    }
+
+    50% {
+        transform: rotate(15deg);
+    }
 }
 
 @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .loading-text {
@@ -151,9 +167,17 @@ body {
 }
 
 @keyframes loading {
-    0% { width: 0%; }
-    50% { width: 70%; }
-    100% { width: 100%; }
+    0% {
+        width: 0%;
+    }
+
+    50% {
+        width: 70%;
+    }
+
+    100% {
+        width: 100%;
+    }
 }
 
 /* ========================================
@@ -164,7 +188,7 @@ body {
     display: flex;
     flex-direction: column;
     background: var(--bg-primary);
-    background-image: 
+    background-image:
         radial-gradient(ellipse at top, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
         radial-gradient(ellipse at bottom, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
 }
@@ -203,8 +227,15 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
 }
 
 .logo-text {
@@ -247,9 +278,9 @@ body {
     max-height: 400px;
     background: var(--bg-glass);
     border-radius: var(--radius-xl);
-    overflow: hidden;
+    overflow: visible;
     border: 1px solid var(--border-color);
-    box-shadow: 
+    box-shadow:
         0 25px 50px -12px rgba(0, 0, 0, 0.4),
         0 0 0 1px rgba(255, 255, 255, 0.05);
     margin-bottom: var(--spacing-xl);
@@ -281,7 +312,7 @@ model-viewer {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 
+    box-shadow:
         0 10px 30px rgba(102, 126, 234, 0.4),
         0 0 0 3px rgba(255, 255, 255, 0.1);
     transition: all var(--transition-normal);
@@ -290,7 +321,7 @@ model-viewer {
 
 .ar-button:hover {
     transform: translateX(-50%) translateY(-2px);
-    box-shadow: 
+    box-shadow:
         0 15px 40px rgba(102, 126, 234, 0.5),
         0 0 0 3px rgba(255, 255, 255, 0.2);
 }
@@ -346,7 +377,9 @@ model-viewer {
 }
 
 @keyframes spinner {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* AR Fallback */
@@ -466,8 +499,15 @@ model-viewer {
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 .fruit-details h3 {
@@ -545,33 +585,33 @@ model-viewer {
     .header {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .logo-text {
         font-size: 1.1rem;
     }
-    
+
     .main-content {
         padding: var(--spacing-md);
     }
-    
+
     .viewer-container {
         max-height: 350px;
         border-radius: var(--radius-lg);
     }
-    
+
     .instructions-steps {
         grid-template-columns: 1fr;
     }
-    
+
     .ar-button {
         padding: var(--spacing-sm) var(--spacing-lg);
         font-size: 0.9rem;
     }
-    
+
     .fruit-emoji {
         font-size: 2.5rem;
     }
-    
+
     .fruit-details h3 {
         font-size: 1.1rem;
     }
@@ -605,6 +645,7 @@ model-viewer .hotspot {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -616,15 +657,26 @@ model-viewer .hotspot {
 }
 
 /* Stagger animation for children */
-.stagger-animation > * {
+.stagger-animation>* {
     opacity: 0;
     animation: fadeIn 0.5s ease forwards;
 }
 
-.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
-.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
-.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
-.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation>*:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.stagger-animation>*:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.stagger-animation>*:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.stagger-animation>*:nth-child(4) {
+    animation-delay: 0.4s;
+}
 
 /* ========================================
    Print Styles

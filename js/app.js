@@ -30,6 +30,9 @@
      * Initialize the application
      */
     function init() {
+        // Check AR support FIRST to show/hide button immediately
+        checkARSupport();
+
         // Get session fruit
         currentFruit = window.FruitManager.getSessionFruit();
 
@@ -43,9 +46,6 @@
 
         // Load the fruit model
         loadFruitModel(currentFruit);
-
-        // Check AR support
-        checkARSupport();
     }
 
     /**
@@ -176,63 +176,28 @@
         // Improved mobile detection (includes modern iPads that report as Macintosh)
         const ua = navigator.userAgent;
         const isAndroid = /android/i.test(ua);
-        const isIOS = /iPad|iPhone|iPod/.test(ua);
-        const isIPadOS = /Macintosh/i.test(ua) && navigator.maxTouchPoints > 1;
-        const isMobile = isAndroid || isIOS || isIPadOS;
-
-        // Check WebXR support
-        const hasWebXR = 'xr' in navigator;
-        let webXRSupported = false;
-
-        if (hasWebXR) {
-            try {
-                webXRSupported = await navigator.xr.isSessionSupported('immersive-ar');
-            } catch (e) {
-                console.log('WebXR check failed:', e);
-            }
-        }
-
-        // Wait for model-viewer to be ready, then check canActivateAR
-        const checkModelViewerAR = () => {
-            return new Promise((resolve) => {
-                const check = () => {
-                    if (elements.fruitViewer.canActivateAR !== undefined) {
-                        resolve(elements.fruitViewer.canActivateAR);
-                    } else {
-                        setTimeout(check, 100);
-                    }
-                };
-                check();
-            });
-        };
-
-        // Check if model-viewer can activate AR
-        const canActivateAR = await checkModelViewerAR();
+        const isIOS = /iPad|iPhone|iPod/.test(ua) ||
+            (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+        const isMobile = isAndroid || isIOS || navigator.maxTouchPoints > 0;
 
         console.log('AR Support Check:', {
-            hasWebXR,
-            webXRSupported,
+            userAgent: ua,
             isAndroid,
             isIOS,
-            isIPadOS,
             isMobile,
-            canActivateAR
+            maxTouchPoints: navigator.maxTouchPoints
         });
 
-        // Show/hide AR button based on device capability
-        if (canActivateAR) {
-            // AR is available - show button
+        // ALWAYS show the button on mobile devices
+        if (isMobile) {
             elements.arButton.style.display = 'flex';
             elements.arFallback.classList.add('hidden');
-        } else if (isMobile) {
-            // Mobile device but AR might still work via Scene Viewer/Quick Look
-            // Keep button visible - let model-viewer handle the fallback
-            elements.arButton.style.display = 'flex';
-            elements.arFallback.classList.add('hidden');
+            console.log('Mobile device detected - showing AR button');
         } else {
-            // Desktop without AR support - hide button, show fallback
+            // Desktop - hide button, show fallback
             elements.arButton.style.display = 'none';
             elements.arFallback.classList.remove('hidden');
+            console.log('Desktop detected - hiding AR button');
         }
     }
 
