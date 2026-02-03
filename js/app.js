@@ -62,9 +62,7 @@
         elements.newFruitBtn.addEventListener('click', handleNewFruit);
 
         // AR button click tracking
-        elements.arButton.addEventListener('click', () => {
-            console.log('AR mode activated for:', currentFruit.name);
-        });
+        elements.arButton.addEventListener('click', activateAR);
     }
 
     /**
@@ -175,38 +173,87 @@
      * Check if AR is supported on this device
      */
     async function checkARSupport() {
+        // Improved mobile detection (includes modern iPads that report as Macintosh)
+        const ua = navigator.userAgent;
+        const isAndroid = /android/i.test(ua);
+        const isIOS = /iPad|iPhone|iPod/.test(ua);
+        const isIPadOS = /Macintosh/i.test(ua) && navigator.maxTouchPoints > 1;
+        const isMobile = isAndroid || isIOS || isIPadOS;
+
         // Check WebXR support
         const hasWebXR = 'xr' in navigator;
-        let arSupported = false;
+        let webXRSupported = false;
 
         if (hasWebXR) {
             try {
-                arSupported = await navigator.xr.isSessionSupported('immersive-ar');
+                webXRSupported = await navigator.xr.isSessionSupported('immersive-ar');
             } catch (e) {
                 console.log('WebXR check failed:', e);
             }
         }
 
-        // Check for Scene Viewer (Android) or Quick Look (iOS)
-        const isAndroid = /android/i.test(navigator.userAgent);
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        // Wait for model-viewer to be ready, then check canActivateAR
+        const checkModelViewerAR = () => {
+            return new Promise((resolve) => {
+                const check = () => {
+                    if (elements.fruitViewer.canActivateAR !== undefined) {
+                        resolve(elements.fruitViewer.canActivateAR);
+                    } else {
+                        setTimeout(check, 100);
+                    }
+                };
+                check();
+            });
+        };
 
-        // model-viewer handles fallbacks, but we show message for desktop
-        const isMobile = isAndroid || isIOS;
-
-        if (!arSupported && !isMobile) {
-            // Desktop without AR support
-            elements.arFallback.classList.remove('hidden');
-            elements.arButton.style.display = 'none';
-        }
+        // Check if model-viewer can activate AR
+        const canActivateAR = await checkModelViewerAR();
 
         console.log('AR Support Check:', {
             hasWebXR,
-            arSupported,
+            webXRSupported,
             isAndroid,
             isIOS,
-            isMobile
+            isIPadOS,
+            isMobile,
+            canActivateAR
         });
+
+        // Show/hide AR button based on device capability
+        if (canActivateAR) {
+            // AR is available - show button
+            elements.arButton.style.display = 'flex';
+            elements.arFallback.classList.add('hidden');
+        } else if (isMobile) {
+            // Mobile device but AR might still work via Scene Viewer/Quick Look
+            // Keep button visible - let model-viewer handle the fallback
+            elements.arButton.style.display = 'flex';
+            elements.arFallback.classList.add('hidden');
+        } else {
+            // Desktop without AR support - hide button, show fallback
+            elements.arButton.style.display = 'none';
+            elements.arFallback.classList.remove('hidden');
+        }
+    }
+
+    /**
+     * Activate AR mode
+     */
+    function activateAR() {
+        console.log('Activating AR for:', currentFruit.name);
+
+        // Use model-viewer's built-in AR activation
+        if (elements.fruitViewer.canActivateAR) {
+            elements.fruitViewer.activateAR();
+        } else {
+            // Fallback: try to activate anyway (Scene Viewer / Quick Look might work)
+            try {
+                elements.fruitViewer.activateAR();
+            } catch (e) {
+                console.log('AR activation failed:', e);
+                alert('AR is not available on this device. Please try on a mobile device with AR support.');
+            }
+        }
     }
 
     /**
