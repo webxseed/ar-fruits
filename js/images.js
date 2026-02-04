@@ -76,6 +76,12 @@ const IMAGES = [
         "name": "Watermelon",
         "model": "assets/models/watermelon.glb",
         "color": "#f8d56b"
+    },
+    {
+        "id": "Obligo",
+        "name": "Obligo",
+        "model": "assets/models/logo-lt.glb",
+        "color": "#000000"
     }
 ];
 
