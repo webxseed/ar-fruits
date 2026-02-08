@@ -5,84 +5,12 @@
 
 const FRUITS = [
     {
-        id: 'apple',
-        name: 'Apple',
-        emoji: '🍎',
-        description: 'A crisp, sweet fruit perfect for any occasion',
-        model: 'assets/models/apple.glb',
-        color: '#ff6b6b'
-    },
-    {
-        id: 'banana',
-        name: 'Banana',
-        emoji: '🍌',
-        description: 'A tropical delight, rich in potassium',
-        model: 'assets/models/banana.glb',
-        color: '#ffd93d'
-    },
-    {
-        id: 'orange',
-        name: 'Orange',
-        emoji: '🍊',
-        description: 'Bursting with vitamin C and sunshine',
-        model: 'assets/models/orange.glb',
-        color: '#ff9f43'
-    },
-    {
-        id: 'strawberry',
-        name: 'Strawberry',
-        emoji: '🍓',
-        description: 'Sweet, juicy, and romantically red',
-        model: 'assets/models/strawberry.glb',
-        color: '#ee5a5a'
-    },
-    {
-        id: 'pineapple',
-        name: 'Pineapple',
-        emoji: '🍍',
-        description: 'The crown jewel of tropical fruits',
-        model: 'assets/models/pineapple.glb',
-        color: '#f8d56b'
-    },
-    {
-        id: 'watermelon',
-        name: 'Watermelon',
-        emoji: '🍉',
-        description: 'Summer\'s favorite refreshing treat',
-        model: 'assets/models/watermelon.glb',
-        color: '#26de81'
-    },
-    {
-        id: 'grapes',
-        name: 'Grapes',
-        emoji: '🍇',
-        description: 'Clusters of sweet, bite-sized perfection',
-        model: 'assets/models/grapes.glb',
-        color: '#a55eea'
-    },
-    {
-        id: 'pear',
-        name: 'Pear',
-        emoji: '🍐',
-        description: 'Elegantly shaped and delicately sweet',
-        model: 'assets/models/pear.glb',
-        color: '#c4e538'
-    },
-    {
-        id: 'kiwi',
-        name: 'Kiwi',
-        emoji: '🥝',
-        description: 'Fuzzy outside, tangy-sweet inside',
-        model: 'assets/models/kiwi.glb',
-        color: '#7bed9f'
-    },
-    {
-        id: 'mango',
-        name: 'Mango',
-        emoji: '🥭',
-        description: 'The king of fruits, lusciously tropical',
-        model: 'assets/models/mango.glb',
-        color: '#ffa502'
+        id: 'shift',
+        name: 'Shift',
+        emoji: '📦',
+        description: 'Shift 3D model',
+        model: 'assets/models/shift.glb',
+        color: '#667eea'
     }
 ];
 
